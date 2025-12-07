@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Awesome SVG图标生成器</title>
+    <!-- 引入 Font Awesome JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-magic"></i> Font Awesome SVG图标生成器</h1>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧：图标选择区 -->
+            <div class="left-panel">
+                <div class="search-section">
+                    <div class="search-box">
+                        <input type="text" id="iconSearch" placeholder="🔍 搜索图标名称..." autocomplete="off">
+                        <div class="search-clear" id="clearSearch">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                    <div class="search-info">
+                        <div class="category-filter">
+                            <button class="category-btn active" data-category="all">全部</button>
+                            <button class="category-btn" data-category="solid">实心</button>
+                            <button class="category-btn" data-category="regular">空心</button>
+                            <button class="category-btn" data-category="brands">品牌</button>
+                        </div>
+                        <span id="searchCount">加载中...</span>
+                    </div>
+                </div>
+
+                <div class="icons-grid" id="iconsGrid">
+                    <!-- 图标将通过JS动态加载 -->
+                </div>
+
+                <div class="pagination-controls">
+                    <button class="page-btn prev-btn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="page-info" id="pageInfo">第 1 页</span>
+                    <button class="page-btn next-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 中间：配置和预览区 -->
+            <div class="center-panel">
+                <div class="selected-icon-section">
+                    <h3><i class="fas fa-star"></i> 当前选择</h3>
+                    <div class="selected-icon-display">
+                        <div class="selected-icon-preview">
+                            <i class="fas fa-heart" id="selectedIconPreview"></i>
+                        </div>
+                        <div class="selected-icon-info">
+                            <h4 id="selectedIconName">fa-heart</h4>
+                            <div class="icon-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">Unicode:</span>
+                                    <code id="selectedIconUnicode">f004</code>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">样式:</span>
+                                    <span id="selectedIconStyle">solid</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">类名:</span>
+                                    <code id="selectedIconClass">fas fa-heart</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="configuration-section">
+                    <h3><i class="fas fa-sliders-h"></i> 配置选项</h3>
+
+                    <div class="config-group">
+                        <h4><i class="fas fa-paint-brush"></i> 颜色设置</h4>
+                        <div class="config-row">
+                            <label for="iconColor">前景颜色:</label>
+                            <div class="color-picker">
+                                <input type="color" id="iconColor" value="#ffffff">
+                                <span id="iconColorValue">#ffffff</span>
+                            </div>
+                        </div>
+                        <div class="config-row">
+                            <label for="bgColor">背景颜色:</label>
+                            <div class="color-picker">
+                                <input type="color" id="bgColor" value="#4361ee">
+                                <span id="bgColorValue">#4361ee</span>
+                            </div>
+                        </div>
+                        <div class="config-row">
+                            <label for="bgType">背景形状:</label>
+                            <select id="bgType">
+                                <option value="none">无背景</option>
+                                <option value="circle" selected>圆形</option>
+                                <option value="square">方形</option>
+                                <option value="rounded">圆角方形</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="config-group">
+                        <h4><i class="fas fa-expand-alt"></i> 尺寸设置</h4>
+                        <div class="config-row">
+                            <label for="horizontalOffset">水平偏移:</label>
+                            <input type="range" id="horizontalOffset" min="-50" max="50" value="0">
+                            <span id="horizontalOffsetValue">0</span>
+                        </div>
+                        <div class="config-row">
+                            <label for="verticalOffset">垂直偏移:</label>
+                            <input type="range" id="verticalOffset" min="-50" max="50" value="0">
+                            <span id="verticalOffsetValue">0</span>
+                        </div>
+                        <div class="config-row">
+                            <label for="canvasSize">画布尺寸:</label>
+                            <input type="range" id="canvasSize" min="50" max="150" step="10" value="100">
+                            <span id="canvasSizeValue">100×100</span>
+                        </div>
+                        <div class="config-row">
+                            <label for="iconSize">图标大小:</label>
+                            <input type="range" id="iconSize" min="20" max="100" value="70">
+                            <span id="iconSizeValue">70%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：结果和代码区 -->
+            <div class="right-panel">
+                <div class="preview-section">
+                    <h3><i class="fas fa-eye"></i> SVG预览</h3>
+                    <div class="preview-container">
+                        <div class="preview-box">
+                            <svg id="previewSvg" width="200" height="200" viewBox="0 0 100 100"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="45" fill="#4361ee" />
+                                <path d="M50 20a5 5 0 0 1 4 2l4 4a5 5 0 0 1 7 0l4-4a5 5 0 0 1 8 4v30a5 5 0 0 1-2 4l-20 20a5 5 0 0 1-7 0l-20-20a5 5 0 0 1-2-4V26a5 5 0 0 1 8-4l4 4a5 5 0 0 1 7 0l4-4a5 5 0 0 1 4-2z" 
+                                      fill="#ffffff"/>
+                            </svg>
+                        </div>
+                        <div class="preview-label">SVG预览</div>
+                    </div>
+                </div>
+
+                <div class="output-section">
+                    <div class="code-header">
+                        <h4><i class="fas fa-code"></i> SVG代码</h4>
+                        <div class="copy-buttons">
+                            <button class="copy-btn" id="copySvgBtn">
+                                <i class="far fa-copy"></i> 复制SVG
+                            </button>
+                            <button class="copy-btn" id="copyEncodedSvgBtn">
+                                <i class="fas fa-link"></i> 复制favicon链接
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="svgCode" class="code-output" readonly spellcheck="false"></textarea>
+                    
+                    <div class="action-buttons">
+                        <button id="downloadSvg" class="btn-secondary">
+                            <i class="fas fa-download"></i> 下载SVG
+                        </button>
+                        <button id="updateFavicon" class="btn-primary">
+                            <i class="fas fa-sync-alt"></i> 更新页面图标
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Font Awesome SVG图标生成器 &copy; 2024 | 使用Font Awesome 6.4.0 | 基于SVG路径生成</p>
+            <p class="footer-note">提示：使用键盘左右箭头键可以翻页，点击图标可查看详情并生成SVG</p>
+        </footer>
+    </div>
+
+    <!-- Toast通知 -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">代码已复制到剪贴板！</span>
+    </div>
+
+    <!-- 引入项目脚本 -->
+    <script src="script.js"></script>
+</body>
+</html>
