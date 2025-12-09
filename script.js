@@ -406,23 +406,23 @@ class FontAwesomeSVGGenerator {
             // 添加背景
             if (config.bgType !== 'none') {
                 const center = config.canvasSize / 2;
-                const size = config.canvasSize * 0.9;
+                const size = config.canvasSize * 0.98; // 增大到98%，更接近画布边缘
 
                 switch (config.bgType) {
                     case 'circle':
                         svg += `  <circle cx="${center}" cy="${center}" r="${size / 2}" fill="${config.bgColor}"/>\n`;
                         break;
                     case 'square':
-                        const squareSize = size * 0.9;
+                        const squareSize = size;
                         const squareX = (config.canvasSize - squareSize) / 2;
                         const squareY = (config.canvasSize - squareSize) / 2;
                         svg += `  <rect x="${squareX}" y="${squareY}" width="${squareSize}" height="${squareSize}" fill="${config.bgColor}"/>\n`;
                         break;
                     case 'rounded':
-                        const roundedSize = size * 0.9;
+                        const roundedSize = size;
                         const roundedX = (config.canvasSize - roundedSize) / 2;
                         const roundedY = (config.canvasSize - roundedSize) / 2;
-                        const radius = roundedSize * 0.1;
+                        const radius = roundedSize * 0.15; // 增大圆角比例，保持视觉协调
                         svg += `  <rect x="${roundedX}" y="${roundedY}" width="${roundedSize}" height="${roundedSize}" rx="${radius}" ry="${radius}" fill="${config.bgColor}"/>\n`;
                         break;
                 }
